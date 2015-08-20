@@ -10,3 +10,16 @@ will ask you a few questions about your migration then it will create it in
 the migrations folder. From here you can add the intended logic to the new
 migration file. Don't forget to set the value of isReversible to 'true' or
 'false'.
+
+To run your new migration execute the command 'nomad up'. This will apply any
+unapplied migrations in order of creation. If you want to migrate up to a
+specific migration you can add the name or filename of the migration to the
+end of the command; 'nomad up addSecondAddressToContact' or
+'nomad up 20150908-132201-00-addSecondAddressToContact.js'.
+
+Sometimes mistakes happen. To rollback a migration use 'nomad down
+addSecondAddressToContact'. This will rollback all migrations back to and
+including 'addSecondAddressToContact'.
+
+To see what migrations have been applied use 'nomad log'. This will render a
+table listing all migrations nomad knows about and their status.
