@@ -2,7 +2,7 @@
 exports.name         = '{{name}}';
 exports.description  = '{{description}}';
 
-exports.isReversable = null;
+exports.isReversible = null;
 exports.isIgnored    = false;
 
 
