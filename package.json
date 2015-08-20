@@ -1,0 +1,27 @@
+{
+  "name": "nomad",
+  "version": "0.1.0",
+  "description": "A database migration tool",
+  "main": "index.js",
+  "bin": {
+    "nomad": "./bin/nomad"
+  },
+  "scripts": {
+    "test": "mocha ./test/*.spec.js"
+  },
+  "author": "Robert Hurst <rhurst@e-xact.com>",
+  "license": "ISC",
+  "devDependencies": {
+    "mocha": "^2.2.5"
+  },
+  "dependencies": {
+    "async": "^1.4.2",
+    "chalk": "^1.1.0",
+    "cli-table": "^0.3.1",
+    "inquirer": "^0.9.0",
+    "mkdirp": "^0.5.1",
+    "rc": "^1.1.0",
+    "relative-date": "^1.1.2",
+    "yargs": "^3.19.0"
+  }
+}
