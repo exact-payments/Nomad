@@ -1,5 +1,5 @@
 {
-  "name": "nomad",
+  "name": "nomad-cli",
   "version": "0.1.0",
   "description": "A database migration tool",
   "main": "index.js",
@@ -10,7 +10,7 @@
     "test": "mocha ./test/*.spec.js"
   },
   "author": "Robert Hurst <rhurst@e-xact.com>",
-  "license": "ISC",
+  "license": "MIT",
   "devDependencies": {
     "mocha": "^2.2.5"
   },
