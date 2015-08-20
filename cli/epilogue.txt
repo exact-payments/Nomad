@@ -1,0 +1,12 @@
+Nomad is a migration tool for working with any data store or data base. to
+get started create a 'NomadFile.js' in the root of your project. You can do
+with the 'nomad init' command. This will generate a 'NomadFile.js' file.
+
+Once you have your 'NomadFile.js' generated you will need to add the appropriate
+logic for each of the methods within the file.
+
+To generate your first migration execute 'nomad create' in your terminal. Nomad
+will ask you a few questions about your migration then it will create it in
+the migrations folder. From here you can add the intended logic to the new
+migration file. Don't forget to set the value of isReversible to 'true' or
+'false'.
