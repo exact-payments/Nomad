@@ -288,6 +288,7 @@ Here is an example migration. Note that is migration has isIgnored set to true
 to prevent you from copy and pasting this example willy nilly.
 
 __20150818-113521-00.addFirstAndLastToUser.js__
+
 ```javascript
 exports.name         = 'addFirstAndLastToUser';
 exports.description  = 'Adds first and last name fields to the user model';
