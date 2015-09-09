@@ -59,7 +59,7 @@ function confirmMigration(migration, next, stop) {
       '. Please set it to ' + chalk.cyan('true') + ' or ' + chalk.cyan('false')
     );
     console.log();
-    
+
     return stop(
       new Error('isReversible set to null for migration ' + migration.name)
     );

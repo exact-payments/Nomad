@@ -36,7 +36,7 @@ module.exports = function(migrations) {
 
     var fixDate = function(date) {
       return date ? relativeDate(date) : 'Never';
-    }
+    };
 
     table.push([
       primaryColor(migrations[i].name),
