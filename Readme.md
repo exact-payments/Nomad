@@ -292,7 +292,7 @@ __20150818-113521-00.addFirstAndLastToUser.js__
 ```javascript
 exports.name         = 'addFirstAndLastToUser';
 exports.description  = 'Adds first and last name fields to the user model';
-exports.isReversable = null;
+exports.isReversible = null;
 exports.isIgnored    = true;
 
 exports.up = function(db, done) {
