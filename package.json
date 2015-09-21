@@ -1,6 +1,6 @@
 {
   "name": "nomad-cli",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "A database migration tool",
   "main": "index.js",
   "bin": {
