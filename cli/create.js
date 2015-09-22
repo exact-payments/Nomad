@@ -19,14 +19,6 @@ module.exports = function(yargs) {
     .help('h')
     .argv;
 
-  if (argv.name) {
-    return create(argv.name, argv.description);
-  }
-
-  console.log();
-  console.log(chalk.white.bold('Create New Nomad Migration'));
-  console.log();
-
   var create = function(name, description) {
     nomad.create(name, description, function(err, result) {
       if (err) { throw err; }
@@ -35,6 +27,14 @@ module.exports = function(yargs) {
       console.log('Created migration ' + chalk.cyan(result.name) + ' at ' + chalk.cyan(result.path));
     });
   };
+
+  if (argv.name) {
+    return create(argv.name, argv.description || '');
+  }
+
+  console.log();
+  console.log(chalk.white.bold('Create New Nomad Migration'));
+  console.log();
 
   inquirer.prompt([
     { name: 'name'       , message: 'What do you want to name the migration?' },
