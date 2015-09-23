@@ -20,7 +20,8 @@ module.exports = function(yargs) {
   return nomad.up({
     targetMigration   : migrationName,
     confirmMigration  : confirmMigration,
-    confirmWriteToDisk: confirmWriteToDisk
+    confirmWriteToDisk: confirmWriteToDisk,
+    confirmUpdateInDb : confirmUpdateInDb
   }, function(err, count) {
     if (err) { throw err; }
     console.log(count ? count + ' migrations applied' : 'no migrations pending');
@@ -29,25 +30,6 @@ module.exports = function(yargs) {
     console.log();
   });
 };
-
-function confirmWriteToDisk(migration, next, stop) {
-
-  console.log();
-
-  inquirer.prompt([{
-    type   : 'confirm',
-    name   : 'isOk',
-    default: false,
-    message: 'The migration ' + chalk.cyan(migration.name) + ' is not on ' +
-    'disk. Do you want to create it on disk?'
-  }], function(answers) {
-    console.log();
-
-    if (!answers.isOk) { return stop(); }
-    next(null);
-  });
-};
-
 
 function confirmMigration(migration, next, stop) {
   console.log('Applying migration ' + chalk.cyan(migration.name));
@@ -84,4 +66,41 @@ function confirmMigration(migration, next, stop) {
   } else {
     next(null);
   }
+};
+
+function confirmWriteToDisk(migration, next, stop) {
+
+  console.log();
+
+  inquirer.prompt([{
+    type   : 'confirm',
+    name   : 'isOk',
+    default: false,
+    message: 'The migration ' + chalk.cyan(migration.name) + ' is not on ' +
+    'disk. Do you want to create it on disk?'
+  }], function(answers) {
+    console.log();
+
+    if (!answers.isOk) { return stop(); }
+    next(null);
+  });
+};
+
+function confirmUpdateInDb(migration, next, stop) {
+
+  console.log();
+
+  inquirer.prompt([{
+    type   : 'confirm',
+    name   : 'isOk',
+    default: true,
+    message: 'The migration ' + chalk.cyan(migration.name) + ' has been' +
+    'updated on disk and is not in sync with the database. Do you want to ' +
+    'update it in the database?'
+  }], function(answers) {
+    console.log();
+
+    if (!answers.isOk) { return stop(); }
+    next(null);
+  });
 };

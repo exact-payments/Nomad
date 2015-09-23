@@ -54,3 +54,22 @@ function confirmMigration(migration, next, stop) {
 
   next(null);
 };
+
+function confirmUpdateInDb(migration, next, stop) {
+
+  console.log();
+
+  inquirer.prompt([{
+    type   : 'confirm',
+    name   : 'isOk',
+    default: true,
+    message: 'The migration ' + chalk.cyan(migration.name) + ' has been' +
+    'updated on disk and is not in sync with the database. Do you want to ' +
+    'update it in the database?'
+  }], function(answers) {
+    console.log();
+
+    if (!answers.isOk) { return stop(); }
+    next(null);
+  });
+};
