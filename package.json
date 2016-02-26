@@ -23,5 +23,9 @@
     "rc": "^1.1.0",
     "relative-date": "^1.1.2",
     "yargs": "^3.19.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "ssh://git@stash.e-xact.ca:7999/x2/node_nomad.git"
   }
 }

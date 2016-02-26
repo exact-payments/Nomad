@@ -19,9 +19,7 @@ module.exports = function(yargs) {
 
   return nomad.up({
     targetMigration   : migrationName,
-    confirmMigration  : confirmMigration,
-    confirmWriteToDisk: confirmWriteToDisk,
-    confirmUpdateInDb : confirmUpdateInDb
+    confirmMigration  : confirmMigration
   }, function(err, count) {
     if (err) { throw err; }
     console.log(count ? count + ' migrations applied' : 'no migrations pending');
@@ -31,7 +29,7 @@ module.exports = function(yargs) {
   });
 };
 
-function confirmMigration(migration, next, stop) {
+function confirmMigration(migration, cb) {
   console.log('Applying migration ' + chalk.cyan(migration.name));
 
   if (migration.isReversible === null) {
@@ -42,9 +40,7 @@ function confirmMigration(migration, next, stop) {
     );
     console.log();
 
-    return stop(
-      new Error('isReversible set to null for migration ' + migration.name)
-    );
+    return cb(null, false);
   }
 
   if (!migration.isReversible) {
@@ -60,47 +56,9 @@ function confirmMigration(migration, next, stop) {
     }], function(answers) {
       console.log();
 
-      if (!answers.isOk) { return stop(); }
-      next(null);
+      cb(null, answers.isOk);
     });
   } else {
-    next(null);
+    cb(null, true);
   }
-};
-
-function confirmWriteToDisk(migration, next, stop) {
-
-  console.log();
-
-  inquirer.prompt([{
-    type   : 'confirm',
-    name   : 'isOk',
-    default: false,
-    message: 'The migration ' + chalk.cyan(migration.name) + ' is not on ' +
-    'disk. Do you want to create it on disk?'
-  }], function(answers) {
-    console.log();
-
-    if (!answers.isOk) { return stop(); }
-    next(null);
-  });
-};
-
-function confirmUpdateInDb(migration, next, stop) {
-
-  console.log();
-
-  inquirer.prompt([{
-    type   : 'confirm',
-    name   : 'isOk',
-    default: true,
-    message: 'The migration ' + chalk.cyan(migration.name) + ' has been' +
-    'updated on disk and is not in sync with the database. Do you want to ' +
-    'update it in the database?'
-  }], function(answers) {
-    console.log();
-
-    if (!answers.isOk) { return stop(); }
-    next(null);
-  });
 };
