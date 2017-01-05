@@ -1,15 +1,15 @@
 
-exports.name         = '{{name}}';
-exports.description  = '{{description}}';
+exports.name        = '{{name}}';
+exports.description = '{{description}}';
 
 exports.isReversible = null;
-exports.isIgnored    = false;
+exports.isIgnored    = true;
 
 
-exports.up = function(db, done) {
-
+exports.up = (db, done) => {
+  done();
 };
 
-exports.down = function(db, done) {
-
+exports.down = (db, done) => {
+  done();
 };

@@ -1,34 +1,29 @@
+/* eslint-disable no-console */
+const nomad = require('../');
+const path  = require('path');
 
-var readFileSync = require('fs').readFileSync;
-var pathJoin     = require('path').join;
-var yargs        = require('yargs');
-var completion   = require('./completion');
-var epilogueText = readFileSync(pathJoin(__dirname, 'epilogue.txt'), 'utf8');
+const applyMigrations   = require('./apply-migrations');
+const reverseMigrations = require('./reverse-migrations');
+const displayHelpText   = require('./display-help-text');
 
-var init   = require('./init');
-var create = require('./create');
-var up     = require('./up');
-var down   = require('./down');
-var log    = require('./log');
 
-yargs.usage('Usage: $0 <command>')
-    .demand(1)
-    .command('init'  , 'Create a NomadFile.js in the current directory')
-    .command('create', 'Create a new migration in the migrations directory')
-    .command('up'    , 'Apply pending migrations')
-    .command('down'  , 'Rollback to a previous migration')
-    .command('log'   , 'Display a log of all migrations')
-    .completion('completion', completion)
-    .alias('h', 'help')
-    .help('h')
-    .epilogue(epilogueText.replace(/([^\n])\n([^\n])/g, '$1 $2'))
-    .parse(process.argv);
+const commad = process.argv[2];
 
-switch (yargs.argv._[0]) {
-  case 'init':   init(yargs.reset());   break;
-  case 'create': create(yargs.reset()); break;
-  case 'up':     up(yargs.reset());     break;
-  case 'down':   down(yargs.reset());   break;
-  case 'log':    log(yargs.reset());    break;
-  default:       yargs.showHelp();      break;
-}
+const configFlagIndex = process.argv.slice(3).findIndex(a => a === '-C' || a === '--config');
+const nomadFilePath   = path.join(process.cwd(), configFlagIndex > -1 ?
+  process.argv[configFlagIndex + 4] :
+  'NomadFile.js');
+
+
+nomad.loadNomadFileByPath(nomadFilePath, {}, (err) => {
+  if (err) {
+    console.log(`Failed to read nomad config module from ${nomadFilePath}`);
+    return;
+  }
+
+  switch (commad) {
+  case 'up'  : applyMigrations();   break;
+  case 'down': reverseMigrations(); break;
+  default    : displayHelpText();
+  }
+});
