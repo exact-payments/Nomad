@@ -1,5 +1,3 @@
-/* globals ObjectId */
-
 exports.name         = 'testMigration';
 exports.description  = 'Tests the migration interface';
 
@@ -8,7 +6,9 @@ exports.isIgnored    = false;
 
 
 exports.up = function(db, done) {
+  done();
 };
 
 exports.down = function(db, done) {
+  done();
 };

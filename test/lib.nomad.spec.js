@@ -45,7 +45,7 @@ describe('new Nomad(nomadFile) -> disk', () => {
 
   describe('#getMigrations(cb(err, migrations))', () => {
 
-    it('calls back with all migrations from the database organized into applied, devergent, and unapplied', (done) => {
+    it('calls back with all migrations from the database organized into applied, divergent, and unapplied', (done) => {
       const nomad = new Nomad();
 
       nomad.loadNomadFileByPath(nomadFilePath, {}, (err) => {
@@ -55,11 +55,11 @@ describe('new Nomad(nomadFile) -> disk', () => {
           assert.ifError(err);
 
           assert.equal(migrations.unapplied.length, 2);
-          assert.equal(migrations.devergent.length, 2);
+          assert.equal(migrations.divergent.length, 2);
           assert.equal(migrations.applied.length, 1);
 
           const [migrationC, migrationD]    = migrations.unapplied;
-          const [migrationB, migrationRemC] = migrations.devergent;
+          const [migrationB, migrationRemC] = migrations.divergent;
           const [migrationA]                = migrations.applied;
 
           assert.equal(migrationA.name,    'a');
