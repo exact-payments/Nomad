@@ -1,5 +1,8 @@
 nomad up [target] [options]
 
+Applies pending migrations. If a target is provided then migrations up to and including the target
+are applied.
+
 TARGET:
 
 Target must be a valid migration name of filename. If a target is not given, all pending migrations

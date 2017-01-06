@@ -1,5 +1,7 @@
 nomad down <target> [options]
 
+Reverses applied migrations up to and including the target.
+
 TARGET:
 
 Target must be a valid migration name of filename. Migrations down to and including the target will

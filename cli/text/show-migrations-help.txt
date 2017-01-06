@@ -2,3 +2,11 @@ nomad status [options]
 
 Prints a ANSI tree displaying the current migration status. The tree contains migrations applied,
 unapplied, and divergent.
+
+OPTIONS
+
+Note that all options listed on nomad --help are supported even though they are not listed below.
+
+* --no-unapplied - Do not include unapplied migrations in the tree.
+* --no-applied   - Do not include applied migrations in the tree.
+* --no-divergent - Do not include divergent migrations in the tree.

@@ -19,3 +19,4 @@ OPTIONS:
                     named NomadFile.js
 * --silent        - Disables prompts and standard output.
 * --verbose or -v - Print a stack trace in the event of a nomad error.
+* --no-sync       - Prevent syncing migrations from disk to database.
