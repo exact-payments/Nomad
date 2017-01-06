@@ -46,13 +46,15 @@ class ShowMigrations {
             const margin    = chalk.green('|->');
             lines.push(`${margin} ${pad(migration.name, unappliedWidth)} ${migration.description}`);
           }
+          if (unappliedMigrations.length < 1) {
+            lines.push(`${chalk.green('|')} ${chalk.grey('none')}`);
+          }
           lines.push(chalk.green('| UNAPPLIED MIGRATIONS'));
         }
 
         // add divergent migrations
         if (!this.options['no-divergent']) {
           const divergentMigrations = migrations.divergent;
-          divergentMigrations.push(...divergentMigrations);
           if (divergentMigrations.length > 0) {
             lines.unshift(`${chalk.green('|')} ${chalk.red('DIVERGENT MIGRATIONS')}`);
             const divergentWidth = migrations.divergent
@@ -74,6 +76,9 @@ class ShowMigrations {
           const appliedWidth      = migrations.applied
             .reduce((a, m) => Math.max(a, m.name.length + 1), 0);
           lines.unshift(`${chalk.yellow('|')} ${chalk.yellow('APPLIED MIGRATIONS')}`);
+          if (appliedMigrations.length < 1) {
+            lines.unshift(`${chalk.yellow('|')} ${chalk.grey('none')}`);
+          }
           for (let i = 0; i < appliedMigrations.length; i += 1) {
             const migration = appliedMigrations[i];
             const margin    = chalk.yellow((i === appliedMigrations.length - 1) ? '+-<' : '|-<');

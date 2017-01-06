@@ -74,9 +74,15 @@ class Cli {
       return cb(null);
     }
 
-    this._loadNomadFile(() => {
+    this._loadNomadFile((err) => {
+      if (err) { return this.writeErr('Failed to load noamd file', err); }
+
       const handler = new Handler(this);
-      handler.exec(cb);
+      handler.exec((err) => {
+        if (err) { return this.writeErr(`Failed to execute ${handlerName} command`, err); }
+
+        this.nomad.unloadNomadFile(cb);
+      });
     });
   }
 
