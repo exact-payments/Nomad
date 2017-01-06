@@ -3,8 +3,8 @@
 const migrationRecords = [
   {
     src: `
-exports.name         = 'b';
-exports.description  = 'Updated Migration b';
+exports.name         = 'migration-b';
+exports.description  = 'Migration b';
 exports.isReversible = true;
 exports.up           = (dbApi, cb) => {
   dbApi.up('updated-b', cb);
@@ -14,8 +14,8 @@ exports.down = (dbApi, cb) => {
 };
 `,
     appliedSrc: `
-exports.name         = 'b';
-exports.description  = 'Migration b';
+exports.name         = 'migration-b';
+exports.description  = 'Migration modified since it was applied';
 exports.isReversible = true;
 exports.up           = (dbApi, cb) => {
   dbApi.up('b', cb);
@@ -28,7 +28,7 @@ exports.down = (dbApi, cb) => {
     appliedAt: new Date(),
   }, {
     src: `
-exports.name         = 'c';
+exports.name         = 'migration-c';
 exports.description  = 'Migration c';
 exports.isReversible = true;
 exports.up           = (dbApi, cb) => {
@@ -41,8 +41,8 @@ exports.down = (dbApi, cb) => {
     filename: '00000000-000000-02.c.js',
   }, {
     appliedSrc: `
-exports.name         = 'rem-c';
-exports.description  = 'Removed Migration c';
+exports.name         = 'migration-x';
+exports.description  = 'Migration deleted since it was applied';
 exports.isReversible = true;
 exports.up           = (dbApi, cb) => {
   dbApi.up('rem-c', cb);
@@ -51,11 +51,11 @@ exports.down = (dbApi, cb) => {
   dbApi.down('rem-c', cb);
 };
 `,
-    filename : '00000000-000000-02.rem-c.js',
+    filename : '00000000-000000-03.x.js',
     appliedAt: new Date(),
   }, {
     src: `
-exports.name         = 'a';
+exports.name         = 'migration-a';
 exports.description  = 'Migration a';
 exports.isReversible = true;
 exports.up           = (dbApi, cb) => {
@@ -66,7 +66,7 @@ exports.down = (dbApi, cb) => {
 };
 `,
     appliedSrc: `
-exports.name         = 'a';
+exports.name         = 'migration-a';
 exports.description  = 'Migration a';
 exports.isReversible = true;
 exports.up           = (dbApi, cb) => {
@@ -80,7 +80,7 @@ exports.down = (dbApi, cb) => {
     appliedAt: new Date(),
   }, {
     src: `
-exports.name         = 'd';
+exports.name         = 'migration-d';
 exports.description  = 'Migration d';
 exports.isReversible = true;
 exports.up           = (dbApi, cb) => {
