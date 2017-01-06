@@ -1,0 +1,12 @@
+nomad down <target> [options]
+
+TARGET:
+
+Target must be a valid migration name of filename. Migrations down to and including the target will
+be reversed.
+
+OPTIONS:
+
+Note that all options listed on nomad --help are supported even though they are not listed below.
+
+* --force-reverse - Skip the confirmation prompt for reversing migrations.

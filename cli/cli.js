@@ -27,7 +27,7 @@ class Cli {
     const pargv        = argv.slice(2);
     const optionsIndex = pargv.findIndex(a => a[0] === '-');
     const rawOptions   = optionsIndex > -1 ? pargv.slice(optionsIndex)    : [];
-    const commands     = optionsIndex > -1 ? pargv.slice(0, optionsIndex) : argv;
+    const commands     = optionsIndex > -1 ? pargv.slice(0, optionsIndex) : pargv;
 
     const options = {};
     for (let i = 0; i < rawOptions.length; i += 1) {
@@ -61,6 +61,11 @@ class Cli {
     const handlerName = this.commands[0];
     const Handler     = this.handlers[handlerName];
 
+    if (!handlerName) {
+      this.textOut('help');
+      return cb(null);
+    }
+
     if (!Handler) {
       this.writeErr(`${handlerName} is not a valid command\n\n`);
       this.textOut('help');
@@ -79,12 +84,12 @@ class Cli {
   }
 
   writeOut(marginStr, str) {
+    // TODO: Handle json, yml or xml output
+    if (this.options.slient && !this.options.help && !this.options.h) { return; }
     if (str === undefined) {
       str       = marginStr;
       marginStr = '';
     }
-
-    // TODO: Handle json, yml or xml output
     str = marginStr + str;
     if (this.options['no-color']) {
       str = stripAnsi(marginStr + str);
@@ -94,13 +99,21 @@ class Cli {
 
   writeErr(str, err) {
     // TODO: Handle json, yml or xml output
+    if (this.options.slient) {
+      if (err) { process.stderr.write(err.stack); }
+      return;
+    }
     str = stripAnsi(str);
     if (!this.options['no-color']) {
       str = chalk.red(str);
     }
     process.stderr.write(str);
-    if (err && (this.options.v || this.options.verbose)) {
-      process.stderr.write(err.stack);
+    if (err) {
+      if (this.options.v || this.options.verbose) {
+        process.stderr.write(`\n${err.stack}`);
+      } else {
+        process.stderr.write(`\n${err.message}\n`);
+      }
     }
   }
 
@@ -117,9 +130,9 @@ class Cli {
 
     this.nomad.loadNomadFileByPath(nomadFilePath, opts, (err) => {
       if (err) {
-        this.writeErr(`Failed to load NomadFile at path ${nomadFilePath}\n\n`, err);
+        return this.writeErr(`\nFailed to load NomadFile at path ${nomadFilePath}\n\n`, err);
       }
-      cb(null);
+      cb(err);
     });
   }
 }

@@ -1,1 +1,20 @@
-NOMAD HELP
+nomad <command> [subcommand...] [options]
+
+Nomad is a database agnostic migration utility. To get started run nomad init to create a NomadFile.
+To create your first migration run nomad create. When ready you can apply this migration by running
+nomad up.
+
+Remember to always backup your database before running migrations.
+
+COMMANDS:
+
+* up   - Applies migrations. See nomad up -h for more details.
+* down - Reverses migrations. See nomad down -h for more details.
+
+OPTIONS:
+
+* --help    or -h - Print the help text for the given command.
+* --config  or -c - Set a custom config path. Defaults to the current working directory and a file
+                    named NomadFile.js
+* --silent        - Disables prompts and standard output.
+* --verbose or -v - Print a stack trace in the event of a nomad error.

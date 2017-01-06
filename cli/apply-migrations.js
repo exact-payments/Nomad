@@ -12,8 +12,18 @@ class ApplyMigrations {
   }
 
   exec(cb) {
-    const target = this.commands[1];
+    if (this.options.h || this.options.help) {
+      this.cli.textOut('apply-migrations-help');
+      return cb(null);
+    }
 
+    if (this.commands.length > 2) {
+      this.cli.writeErr('Too many commands\n\n');
+      this.cli.textOut('apply-migrations-help');
+      return cb(null);
+    }
+
+    const target = this.commands[1];
     this.cli.writeOut(
       `Applying pending migrations${target ? ` up to and including ${target}` : ''}\n\n`
     );
