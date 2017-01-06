@@ -30,6 +30,14 @@ class ShowMigrations {
           return cb(null);
         }
 
+        const pad = (str, len) => {
+          str += ':';
+          while (str.length < len) { str += ' '; }
+          return str;
+        };
+        const nameWidth = [].concat(migrations.applied, migrations.unapplied, migrations.divergent)
+          .reduce((a, m) => Math.max(a, m.name.length + 1), 0);
+
         const lines = [];
 
         // add unapplied migrations
@@ -37,7 +45,7 @@ class ShowMigrations {
         for (let i = 0; i < unappliedMigrations.length; i += 1) {
           const migration = unappliedMigrations[i];
           const margin    = chalk.green('|->');
-          lines.push(`${margin} ${migration.name}: ${migration.description}`);
+          lines.push(`${margin} ${pad(migration.name, nameWidth)} ${migration.description}`);
         }
         lines.push(chalk.green('| UNAPPLIED MIGRATIONS'));
 
@@ -48,7 +56,7 @@ class ShowMigrations {
           const migration = divergentMigrations[i];
           const margin    = chalk.red((i === 0) ? '+->' : '|->');
           const auxMargin = (i > unappliedMigrations.length - 1) ? ' ' : chalk.green('|');
-          const desc      = `${migration.name}: ${migration.description}`;
+          const desc      = `${pad(migration.name, nameWidth)} ${migration.description}`;
           lines.unshift(`${auxMargin} ${margin} ${desc}`);
         }
         if (divergentMigrations.length > 0) {
@@ -61,7 +69,7 @@ class ShowMigrations {
         for (let i = 0; i < appliedMigrations.length; i += 1) {
           const migration = appliedMigrations[i];
           const margin    = chalk.yellow((i === appliedMigrations.length - 1) ? '+->' : '|->');
-          lines.unshift(`${margin} ${migration.name}: ${migration.description}`);
+          lines.unshift(`${margin} ${pad(migration.name, nameWidth)} ${migration.description}`);
         }
         lines.push(chalk.green('^'));
 

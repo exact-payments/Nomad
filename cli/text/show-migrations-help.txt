@@ -1,0 +1,4 @@
+nomad status [options]
+
+Prints a ANSI tree displaying the current migration status. The tree contains migrations applied,
+unapplied, and divergent.
