@@ -23,21 +23,30 @@ class ApplyMigrations {
       return cb(null);
     }
 
-    const target = this.commands[1];
-    this.cli.writeOut(`Reversing applied migrations up to and including ${target}\n\n`);
+    const exec = (cb) => {
+      const target = this.commands[1];
+      this.cli.writeOut(`Reversing applied migrations up to and including ${target}\n\n`);
 
-    this.nomad.down(target, {
-      onReverseMigration  : (...args) => this._onReverseMigration(...args),
-      onReversedMigration : (...args) => this._onReversedMigration(...args),
-      canReverseMigrations: (...args) => this._canReverseMigrations(...args),
-    }, (err) => {
-      if (err) {
-        this.cli.writeErr('Failed to complete migration\n', err);
-        return cb(null);
-      }
+      this.nomad.down(target, {
+        onReverseMigration  : (...args) => this._onReverseMigration(...args),
+        onReversedMigration : (...args) => this._onReversedMigration(...args),
+        canReverseMigrations: (...args) => this._canReverseMigrations(...args),
+      }, (err) => {
+        if (err) {
+          this.cli.writeErr('Failed to complete migration\n', err);
+          return cb(null);
+        }
 
-      this.cli.writeOut(chalk.green('\nMigration completed successfully\n\n'));
-      cb(null);
+        this.cli.writeOut(chalk.green('\nMigration completed successfully\n\n'));
+        cb(null);
+      });
+    };
+
+    if (this.options['no-sync']) { return exec(); }
+
+    this.nomad.syncDatabaseAndDisk((err) => {
+      if (err) { return cb(err); }
+      exec(cb);
     });
   }
 

@@ -3,8 +3,9 @@ const path            = require('path');
 const chalk           = require('chalk');
 const stripAnsi       = require('strip-ansi');
 
-const ApplyMigrations   = require('./apply-migrations');
-const ReverseMigrations = require('./reverse-migrations');
+const ApplyMigrations   = require('./command/apply-migrations');
+const ReverseMigrations = require('./command/reverse-migrations');
+const ShowMigrations    = require('./command/show-migrations');
 
 
 const noop = (err) => {
@@ -18,8 +19,9 @@ class Cli {
     this.options  = null;
     this.commands = null;
     this.handlers = {
-      up  : ApplyMigrations,
-      down: ReverseMigrations,
+      up    : ApplyMigrations,
+      down  : ReverseMigrations,
+      status: ShowMigrations,
     };
   }
 
@@ -128,12 +130,7 @@ class Cli {
 
     migrationsPath && (opts.migrationsPath = migrationsPath);
 
-    this.nomad.loadNomadFileByPath(nomadFilePath, opts, (err) => {
-      if (err) {
-        return this.writeErr(`\nFailed to load NomadFile at path ${nomadFilePath}\n\n`, err);
-      }
-      cb(err);
-    });
+    this.nomad.loadNomadFileByPath(nomadFilePath, opts, cb);
   }
 }
 
