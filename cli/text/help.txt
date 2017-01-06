@@ -8,8 +8,9 @@ Remember to always backup your database before running migrations.
 
 COMMANDS:
 
-* up   - Applies migrations. See nomad up -h for more details.
-* down - Reverses migrations. See nomad down -h for more details.
+* status - Show status of all migrations. See nomad status -h for more details.
+* up     - Applies migrations. See nomad up -h for more details.
+* down   - Reverses migrations. See nomad down -h for more details.
 
 OPTIONS:
 
