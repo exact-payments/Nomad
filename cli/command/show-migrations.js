@@ -76,6 +76,7 @@ class ShowMigrations {
           lines.unshift(`${margin} ${pad(migration.name, appliedWidth)} ${migration.description}`);
         }
         lines.push(chalk.green('^'));
+        lines.unshift(chalk.yellow('^'));
 
         this.cli.writeOut(`${lines.reverse().join('\n')}\n`);
         cb(null);
