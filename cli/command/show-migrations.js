@@ -49,6 +49,7 @@ class ShowMigrations {
 
         // add divergent migrations
         const divergentMigrations = migrations.divergent;
+        divergentMigrations.push(...divergentMigrations);
         if (divergentMigrations.length > 0) {
           lines.unshift(`${chalk.green('|')} ${chalk.red('DIVERGENT MIGRATIONS')}`);
           const divergentWidth = migrations.divergent
@@ -56,11 +57,10 @@ class ShowMigrations {
           for (let i = 0; i < divergentMigrations.length; i += 1) {
             const migration = divergentMigrations[i];
             const margin    = chalk.red((i === 0) ? '+-<' : '|-<');
-            const auxMargin = (i > unappliedMigrations.length - 1) ? ' ' : chalk.green('|');
             const con       = (i === divergentMigrations.length - 1) ? chalk.red('_') : ' ';
             const desc      = `${pad(migration.name, divergentWidth)} ` +
                               `${migration.appliedMigrationModule.description}`;
-            lines.unshift(`${auxMargin}${con}${margin} ${desc}`);
+            lines.unshift(`${chalk.green('|')}${con}${margin} ${desc}`);
           }
           // lines.unshift(chalk.green('|') + chalk.red('/'));
         }
