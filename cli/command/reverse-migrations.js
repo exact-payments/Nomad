@@ -42,7 +42,7 @@ class ApplyMigrations {
       });
     };
 
-    if (this.options['no-sync']) { return exec(); }
+    if (this.options['no-sync']) { return exec(cb); }
 
     this.nomad.syncDatabaseAndDisk((err) => {
       if (err) { return cb(err); }
