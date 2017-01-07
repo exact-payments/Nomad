@@ -51,7 +51,10 @@ class ApplyMigrations {
   }
 
   _onReverseMigration(migration) {
-    this.cli.writeOut(chalk.red('   | <- '), `${migration.name} - Reversing migration\n`);
+    this.cli.writeOut(
+      chalk.red('   | <- '),
+      chalk.grey(`${migration.name} - Reversing migration\n`)
+    );
   }
 
   _onReversedMigration(migration) {
@@ -79,7 +82,7 @@ class ApplyMigrations {
         type   : 'confirm',
         name   : 'ok',
         message: 'Are you sure you want to continue?',
-        default: true,
+        default: false,
       },
     ]).then(({ ok }) => {
       this.cli.writeOut('\n');

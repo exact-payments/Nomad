@@ -57,7 +57,10 @@ class ApplyMigrations {
   }
 
   _onApplyMigration(migration) {
-    this.cli.writeOut(chalk.green('-> |    '), `${migration.name} - Applying migration\n`);
+    this.cli.writeOut(
+      chalk.green('-> |    '),
+      chalk.grey(`${migration.name} - Applying migration\n`)
+    );
   }
 
   _onAppliedMigration(migration) {
@@ -65,7 +68,10 @@ class ApplyMigrations {
   }
 
   _onReverseMigration(migration) {
-    this.cli.writeOut(chalk.red('   | <- '), `${migration.name} - Reversing divergent migration\n`);
+    this.cli.writeOut(
+      chalk.red('   | <- '),
+      chalk.grey(`${migration.name} - Reversing divergent migration\n`)
+    );
   }
 
   _onReversedMigration(migration) {
@@ -141,7 +147,7 @@ class ApplyMigrations {
         type   : 'confirm',
         name   : 'ok',
         message: 'Are you sure you want to continue?',
-        default: true,
+        default: false,
       },
     ]).then(({ ok }) => {
       this.cli.writeOut('\n');
