@@ -54,19 +54,20 @@ describe('new Nomad(nomadFile) -> disk', () => {
         nomad.getMigrations((err, migrations) => {
           assert.ifError(err);
 
-          assert.equal(migrations.unapplied.length, 2);
+          assert.equal(migrations.unapplied.length, 3);
           assert.equal(migrations.divergent.length, 2);
           assert.equal(migrations.applied.length, 1);
 
-          const [migrationC, migrationD]    = migrations.unapplied;
-          const [migrationB, migrationRemC] = migrations.divergent;
-          const [migrationA]                = migrations.applied;
+          const [migrationB, migrationC, migrationD] = migrations.unapplied;
+          const [migrationX, migrationB2]            = migrations.divergent;
+          const [migrationA]                         = migrations.applied;
 
-          assert.equal(migrationA.name,    'a');
-          assert.equal(migrationB.name,    'b');
-          assert.equal(migrationC.name,    'c');
-          assert.equal(migrationRemC.name, 'rem-c');
-          assert.equal(migrationD.name,    'd');
+          assert.equal(migrationA.name,  'migration-a');
+          assert.equal(migrationB.name,  'migration-b');
+          assert.equal(migrationB2.name, 'migration-b');
+          assert.equal(migrationC.name,  'migration-c');
+          assert.equal(migrationX.name,  'migration-x');
+          assert.equal(migrationD.name,  'migration-d');
 
           done();
         });
@@ -83,7 +84,7 @@ describe('new Nomad(nomadFile) -> disk', () => {
       nomad.loadNomadFileByPath(nomadFilePath, {}, (err) => {
         assert.ifError(err);
 
-        nomad.up('c', {}, (err) => {
+        nomad.up('migration-c', {}, (err) => {
           assert.ifError(err);
           done();
         });
@@ -100,7 +101,7 @@ describe('new Nomad(nomadFile) -> disk', () => {
       nomad.loadNomadFileByPath(nomadFilePath, {}, (err) => {
         assert.ifError(err);
 
-        nomad.down('a', {}, (err) => {
+        nomad.down('migration-a', {}, (err) => {
           assert.ifError(err);
           done();
         });
