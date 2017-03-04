@@ -3,6 +3,7 @@ const path            = require('path');
 const chalk           = require('chalk');
 const stripAnsi       = require('strip-ansi');
 
+const CreateMigration   = require('./command/create-migration');
 const ApplyMigrations   = require('./command/apply-migrations');
 const ReverseMigrations = require('./command/reverse-migrations');
 const ShowMigrations    = require('./command/show-migrations');
@@ -19,6 +20,7 @@ class Cli {
     this.options  = null;
     this.commands = null;
     this.handlers = {
+      create: CreateMigration,
       up    : ApplyMigrations,
       down  : ReverseMigrations,
       status: ShowMigrations,
@@ -75,7 +77,7 @@ class Cli {
     }
 
     this._loadNomadFile((err) => {
-      if (err) { return this.writeErr('Failed to load noamd file', err); }
+      if (err) { return this.writeErr('Failed to load nomad file', err); }
 
       const handler = new Handler(this);
       handler.exec((err) => {

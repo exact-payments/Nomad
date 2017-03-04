@@ -7,13 +7,15 @@
     "nomad": "./bin/nomad"
   },
   "scripts": {
-    "test": "mocha ./test/*.spec.js"
+    "test": "mocha ./test/*.spec.js",
+    "lint": "eslint --fix ."
   },
   "author": "Robert Hurst <rhurst@e-xact.com>",
   "license": "MIT",
   "devDependencies": {
     "mocha": "^2.2.5",
-    "sinon": "^1.17.7"
+    "sinon": "^1.17.7",
+    "pre-commit": "^1.2.2"
   },
   "dependencies": {
     "async": "^1.4.2",
@@ -34,5 +36,9 @@
   "repository": {
     "type": "git",
     "url": "ssh://git@stash.e-xact.ca:7999/x2/node_nomad.git"
-  }
+  },
+  "pre-commit": [
+    "lint",
+    "test"
+  ]
 }
