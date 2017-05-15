@@ -11,6 +11,40 @@ const nomadFilePath = path.join(__dirname, 'env/NomadFile');
 describe('new Nomad(nomadFile) -> disk', () => {
 
 
+  describe('#up(target, opts, cb(err))', () => {
+
+    it('reverses divergent migrations, deletes them if they don\'t exist anymore on disk, then applies migrations up to and including a given target updating each', (done) => {
+      const nomad = new Nomad();
+
+      nomad.loadNomadFileByPath(nomadFilePath, {}, (err) => {
+        assert.ifError(err);
+
+        nomad.up('migration-c', {}, (err) => {
+          assert.ifError(err);
+          done();
+        });
+      });
+    });
+  });
+
+
+  describe('#down(target, opts, cb(err))', () => {
+
+    it('reverses migrations down to and including a given target updating each then deletes any that don\'t exist anymore on disk', (done) => {
+      const nomad = new Nomad();
+
+      nomad.loadNomadFileByPath(nomadFilePath, {}, (err) => {
+        assert.ifError(err);
+
+        nomad.down('migration-a', {}, (err) => {
+          assert.ifError(err);
+          done();
+        });
+      });
+    });
+  });
+
+
   describe('#writeMigration(opts, cb(err))', () => {
 
     it('accepts opts and writes a migration to disk using those opts', (done) => {
@@ -69,40 +103,6 @@ describe('new Nomad(nomadFile) -> disk', () => {
           assert.equal(migrationX.name,  'migration-x');
           assert.equal(migrationD.name,  'migration-d');
 
-          done();
-        });
-      });
-    });
-  });
-
-
-  describe('#up(target, opts, cb(err))', () => {
-
-    it('reverses divergent migrations, deletes them if they don\'t exist anymore on disk, then applies migrations up to and including a given target updating each', (done) => {
-      const nomad = new Nomad();
-
-      nomad.loadNomadFileByPath(nomadFilePath, {}, (err) => {
-        assert.ifError(err);
-
-        nomad.up('migration-c', {}, (err) => {
-          assert.ifError(err);
-          done();
-        });
-      });
-    });
-  });
-
-
-  describe('#down(target, opts, cb(err))', () => {
-
-    it('reverses migrations down to and including a given target updating each then deletes any that don\'t exist anymore on disk', (done) => {
-      const nomad = new Nomad();
-
-      nomad.loadNomadFileByPath(nomadFilePath, {}, (err) => {
-        assert.ifError(err);
-
-        nomad.down('migration-a', {}, (err) => {
-          assert.ifError(err);
           done();
         });
       });

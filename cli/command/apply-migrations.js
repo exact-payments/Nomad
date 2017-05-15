@@ -1,4 +1,5 @@
 const chalk    = require('chalk');
+const cardinal = require('cardinal');
 const inquirer = require('inquirer');
 
 
@@ -36,7 +37,7 @@ class ApplyMigrations {
         onReversedMigration          : (...args) => this._onReversedMigration(...args),
         canApplyMigrations           : (...args) => this._canApplyMigrations(...args),
         canReverseDivergentMigrations: (...args) => this._canReverseDivergentMigrations(...args),
-        canApplyUnreversibleMigration: (...args) => this._canApplyUnreversibleMigration(...args),
+        canApplyIrreversibleMigration: (...args) => this._canApplyIrreversibleMigration(...args),
       }, (err) => {
         if (err) {
           this.cli.writeErr('Failed to complete migration\n', err);
@@ -78,13 +79,13 @@ class ApplyMigrations {
     this.cli.writeOut(chalk.red(' <-|--- '), `${migration.name} - Reversed divergent migration\n`);
   }
 
-  _canReverseDivergentMigrations(migrations, cb) {
+  _canReverseDivergentMigrations(migrations, isOk) {
     if (this.options.silent && !this.options['force-reverse-divergent']) {
       this.cli.writeOut(
         'Aborting migration as there are divergent migrations and nomad is ' +
         'running in slient mode.\n\n'
       );
-      return cb(false);
+      return isOk(false);
     }
 
     this.cli.textOut('divergent-warning', '\n');
@@ -93,15 +94,15 @@ class ApplyMigrations {
     this._listMigrations(chalk.red('#{i}. '), migrations);
     this.cli.writeOut('\n');
 
-    const onOk = () => {
+    const finish = () => {
       this.cli.writeOut(
         'Preceeding with migration...\n\n'
       );
-      cb(true);
+      isOk(true);
     };
 
     if (this.options['force-reverse-divergent']) {
-      return onOk();
+      return finish();
     }
 
     inquirer.prompt([
@@ -119,27 +120,27 @@ class ApplyMigrations {
           'Aborting migration as you have declined to reverse the divergent ' +
           'migrations listed above.\n\n'
         );
-        return cb(false);
+        return isOk(false);
       }
 
-      onOk();
+      finish();
     });
   }
 
-  _canApplyMigrations(migrations, cb) {
+  _canApplyMigrations(migrations, isOk) {
     this.cli.writeOut(chalk.bold('The following migrations will be applied:\n'));
     this._listMigrations(chalk.green('#{i}. '), migrations);
     this.cli.writeOut('\n');
 
-    const onOk = () => {
+    const finish = () => {
       this.cli.writeOut(
         'Preceeding with migration...\n\n'
       );
-      cb(true);
+      isOk(true);
     };
 
     if (this.options.silent || this.options['force-apply']) {
-      return onOk();
+      return finish();
     }
 
     inquirer.prompt([
@@ -157,16 +158,61 @@ class ApplyMigrations {
           'Aborting migration as you have declined to apply the migrations ' +
           'listed above.\n\n'
         );
-        return cb(false);
+        return isOk(false);
       }
 
-      onOk();
+      finish();
     });
   }
 
-  _canApplyUnreversibleMigration(migration, cb) {
-    this.cli.writeOut('[CHECK IF CAN APPLY UNREVERSIBLE MIGRATION]\n\n');
-    cb(true);
+  _canApplyIrreversibleMigration(migration, isOk) {
+    this.cli.writeOut(chalk.bold(`-- Start of ${migration.filename} --\n`));
+    let src;
+    try {
+      src = cardinal.highlight(migration.src);
+    } catch (err) {
+      src = migration.src;
+    }
+    this.cli.writeOut(`${src}\n`);
+    this.cli.writeOut(chalk.bold(`-- End of ${migration.filename} --\n\n`));
+
+    this.cli.writeOut(chalk.bold.red('THE ABOVE MIGRATION IS IRREVERSIBLE!\n\n'));
+
+    this.cli.textOut('irreversible-warning', '\n');
+
+    this.cli.writeOut('Review the source of the migration above before continuing.\n\n');
+
+
+    const finish = () => {
+      this.cli.writeOut(
+        'Preceeding with migration...\n\n'
+      );
+      isOk(true);
+    };
+
+    if (this.options.silent || this.options['force-apply-irreversible']) {
+      return finish();
+    }
+
+    inquirer.prompt([
+      {
+        type   : 'confirm',
+        name   : 'ok',
+        message: 'Are you sure you want to continue?',
+        default: false,
+      },
+    ]).then(({ ok }) => {
+      this.cli.writeOut('\n');
+
+      if (!ok) {
+        this.cli.writeOut(
+          'Aborting migration as you have declined to apply an irreversible migration.\n\n'
+        );
+        return isOk(false);
+      }
+
+      finish();
+    });
   }
 
   _listMigrations(margin, migrations) {

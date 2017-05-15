@@ -14,12 +14,13 @@
   "license": "MIT",
   "devDependencies": {
     "mocha": "^2.2.5",
-    "sinon": "^1.17.7",
-    "pre-commit": "^1.2.2"
+    "pre-commit": "^1.2.2",
+    "sinon": "^1.17.7"
   },
   "dependencies": {
     "async": "^1.4.2",
     "blessed": "^0.1.81",
+    "cardinal": "^1.0.0",
     "chalk": "^1.1.3",
     "cli-table": "^0.3.1",
     "eslint": "^3.12.2",

@@ -2,7 +2,7 @@ const chalk    = require('chalk');
 const inquirer = require('inquirer');
 
 
-class ReverseMigrations {
+class SetHeadMigration {
 
   constructor(cli) {
     this.cli      = cli;
@@ -13,13 +13,13 @@ class ReverseMigrations {
 
   exec(cb) {
     if (this.options.h || this.options.help) {
-      this.cli.textOut('reverse-migrations-help');
+      this.cli.textOut('set-head-migration-help');
       return cb(null);
     }
 
     if (this.commands.length > 2) {
       this.cli.writeErr('Too many commands\n\n');
-      this.cli.textOut('reverse-migrations-help');
+      this.cli.textOut('set-head-migration-help');
       return cb(null);
     }
 
@@ -31,19 +31,17 @@ class ReverseMigrations {
         return cb(null);
       }
 
-      this.cli.writeOut(`Reversing applied migrations up to and including ${target}\n\n`);
+      this.cli.writeOut(`Setting head migration to ${target}\n\n`);
 
-      this.nomad.down(target, {
-        onReverseMigration  : (...args) => this._onReverseMigration(...args),
-        onReversedMigration : (...args) => this._onReversedMigration(...args),
-        canReverseMigrations: (...args) => this._canReverseMigrations(...args),
+      this.nomad.setHead(target, {
+        canMarkMigrations: (...args) => this._canMarkMigrations(...args),
       }, (err) => {
         if (err) {
-          this.cli.writeErr('Failed to complete migration\n', err);
+          this.cli.writeErr('Failed to set head migration\n', err);
           return cb(null);
         }
 
-        this.cli.writeOut(chalk.green('\nMigration completed successfully\n\n'));
+        this.cli.writeOut(chalk.green(`\nHead migration set to ${target} successfully\n\n`));
         cb(null);
       });
     };
@@ -56,32 +54,20 @@ class ReverseMigrations {
     });
   }
 
-  _onReverseMigration(migration) {
-    this.cli.writeOut(
-      chalk.red('   | <- '),
-      chalk.grey(`${migration.name} - Reversing migration\n`)
-    );
-  }
+  _canMarkMigrations(migrationsToMarkUnapplied, migrationsToMarkApplied, isOk) {
+    if (this.options.silent || this.options['force-set-head']) {
+      return isOk(true);
+    }
 
-  _onReversedMigration(migration) {
-    this.cli.writeOut(chalk.red(' <-|--- '), `${migration.name} - Reversed migration\n`);
-  }
+    this.cli.textOut('set-head-warning', '\n');
 
-  _canReverseMigrations(migrations, isOk) {
-    this.cli.writeOut(chalk.bold('The following migrations will be reversed:\n'));
-    this._listMigrations(chalk.red('#{i}. '), migrations);
+    this.cli.writeOut(chalk.bold('The following migrations will be marked unapplied:\n'));
+    this._listMigrations(chalk.red('- '), migrationsToMarkUnapplied);
     this.cli.writeOut('\n');
 
-    const finish = () => {
-      this.cli.writeOut(
-        'Preceeding with migration...\n\n'
-      );
-      isOk(true);
-    };
-
-    if (this.options.silent || this.options['force-reverse']) {
-      return finish();
-    }
+    this.cli.writeOut(chalk.bold('The following migrations will be marked applied:\n'));
+    this._listMigrations(chalk.green('+ '), migrationsToMarkApplied);
+    this.cli.writeOut('\n');
 
     inquirer.prompt([
       {
@@ -95,13 +81,15 @@ class ReverseMigrations {
 
       if (!ok) {
         this.cli.writeOut(
-          'Aborting migration as you have declined to reverse the migrations ' +
-          'listed above.\n\n'
+          'Aborting migration as you have declined to mark the migrations listed above.\n\n'
         );
         return isOk(false);
       }
 
-      finish();
+      this.cli.writeOut(
+        'Preceeding with marking head migration...\n\n'
+      );
+      isOk(true);
     });
   }
 
@@ -114,7 +102,7 @@ class ReverseMigrations {
     for (let i = 0; i < migrations.length; i += 1) {
       const migrationName = pad(`${migrations[i].name}:`, nameWidth);
       this.cli.writeOut(
-        chalk.green(margin.replace('#{i}', i)),
+        margin,
         `${migrationName} ${migrations[i].description}\n`
       );
     }
@@ -122,4 +110,4 @@ class ReverseMigrations {
 }
 
 
-module.exports = ReverseMigrations;
+module.exports = SetHeadMigration;

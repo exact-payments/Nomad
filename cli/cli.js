@@ -6,6 +6,7 @@ const stripAnsi       = require('strip-ansi');
 const CreateMigration   = require('./command/create-migration');
 const ApplyMigrations   = require('./command/apply-migrations');
 const ReverseMigrations = require('./command/reverse-migrations');
+const SetHeadMigration  = require('./command/set-head-migration');
 const ShowMigrations    = require('./command/show-migrations');
 
 
@@ -20,10 +21,11 @@ class Cli {
     this.options  = null;
     this.commands = null;
     this.handlers = {
-      create: CreateMigration,
-      up    : ApplyMigrations,
-      down  : ReverseMigrations,
-      status: ShowMigrations,
+      create    : CreateMigration,
+      up        : ApplyMigrations,
+      down      : ReverseMigrations,
+      'set-head': SetHeadMigration,
+      status    : ShowMigrations,
     };
   }
 

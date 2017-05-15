@@ -79,12 +79,15 @@ class ShowMigrations {
           if (appliedMigrations.length < 1) {
             lines.unshift(`${chalk.yellow('|')} ${chalk.grey('none')}`);
           }
+          let irreversible = false;
           for (let i = 0; i < appliedMigrations.length; i += 1) {
             const migration = appliedMigrations[i];
-            const margin    = chalk.yellow((i === appliedMigrations.length - 1) ? '+-<' : '|-<');
-            lines.unshift(
-              `${margin} ${pad(migration.name, appliedWidth)} ${migration.description}`
-            );
+            if (!migration.isReversible) { irreversible = true; }
+            const margin      = chalk.yellow((i === appliedMigrations.length - 1) ? '+-<' : '|-<');
+            const name        = irreversible ? chalk.italic(migration.name) : migration.name;
+            const description = irreversible ?
+              chalk.red.italic(migration.description) : migration.description;
+            lines.unshift(`${margin} ${pad(name, appliedWidth)} ${description}`);
           }
           lines.unshift(chalk.yellow('^'));
         }

@@ -1,0 +1,5 @@
+You are about to change the head migration. Changing the head migration without fully understanding
+what you are doing can be extremely dangerous. You can ruin you migration history and your database
+if done incorrectly.
+
+Continue at your own risk!
