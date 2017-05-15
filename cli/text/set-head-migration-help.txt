@@ -1,0 +1,14 @@
+nomad set-head [target]
+
+Sets the head migration without executing any migrations in the process. This command should not
+be used unless you know what you are doing. This method intended for repairing migration
+collections.
+
+TARGET:
+
+Target must be a valid migration name of filename. The target migration and all migrations before
+will be marked as applied.
+
+OPTIONS:
+
+Note that all options listed on nomad --help are supported even though they are not listed below.

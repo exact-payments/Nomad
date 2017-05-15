@@ -1,0 +1,5 @@
+Divergent migrations have been detected. In order to continue these divergent migrations must be
+reversed. This can be dangerous, so please be sure you know what you are doing.
+
+Divergent migrations occur when a migration is applied, then later, is deleted from or modified
+on disk, or an ancestor migration is force reversed.

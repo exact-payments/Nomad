@@ -1,31 +1,45 @@
 {
   "name": "nomad-cli",
-  "version": "0.1.2",
+  "version": "1.1.0",
   "description": "A database migration tool",
   "main": "index.js",
   "bin": {
     "nomad": "./bin/nomad"
   },
   "scripts": {
-    "test": "mocha ./test/*.spec.js"
+    "test": "mocha ./test/*.spec.js",
+    "lint": "eslint --fix ."
   },
   "author": "Robert Hurst <rhurst@e-xact.com>",
   "license": "MIT",
   "devDependencies": {
-    "mocha": "^3.1.0"
+    "mocha": "^2.2.5",
+    "pre-commit": "^1.2.2",
+    "sinon": "^1.17.7"
   },
   "dependencies": {
     "async": "^1.4.2",
-    "chalk": "^1.1.0",
+    "blessed": "^0.1.81",
+    "cardinal": "^1.0.0",
+    "chalk": "^1.1.3",
     "cli-table": "^0.3.1",
-    "inquirer": "^0.9.0",
+    "eslint": "^3.12.2",
+    "eslint-config-x2": "^2.0.0",
+    "glob": "^7.1.1",
+    "inquirer": "^2.0.0",
     "mkdirp": "^0.5.1",
     "rc": "^1.1.0",
     "relative-date": "^1.1.2",
+    "strip-ansi": "^3.0.1",
+    "vm2": "^3.1.0",
     "yargs": "^3.19.0"
   },
   "repository": {
     "type": "git",
     "url": "ssh://git@stash.e-xact.ca:7999/x2/node_nomad.git"
-  }
+  },
+  "pre-commit": [
+    "lint",
+    "test"
+  ]
 }

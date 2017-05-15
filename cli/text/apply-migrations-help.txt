@@ -1,0 +1,17 @@
+nomad up [target] [options]
+
+Applies pending migrations. If a target is provided then migrations up to and including the target
+are applied.
+
+TARGET:
+
+Target must be a valid migration name of filename. If a target is not given, all pending migrations
+will be applied. If a target is provided, then only pending migrations up to and including the
+target will be applied.
+
+OPTIONS:
+
+Note that all options listed on nomad --help are supported even though they are not listed below.
+
+* --force-reverse-divergent - Skip the confirmation prompt for reversing divergent migrations.
+* --force-apply             - Skip the confirmation prompt for applying migrations.

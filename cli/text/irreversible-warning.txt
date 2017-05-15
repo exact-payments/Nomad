@@ -1,0 +1,5 @@
+Irreversible migrations are just that, irreversible. Do not apply irreversible migrations unless
+your sure you know what you are doing. Once applied the migration cannot be reversed. In the event
+that you apply a irreversible migration then later need to reverse that migration, or one applied
+prior to it, you will have to manually edit your database, then use the set-head command to mark
+the irreversible migration as unapplied.

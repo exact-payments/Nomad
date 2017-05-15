@@ -1,0 +1,12 @@
+nomad create
+
+Creates a new empty migration.
+
+OPTIONS:
+
+Note that all options listed on nomad --help are supported even though they are
+not listed below.
+
+* --name <name> or -n <name>      - Skip the name prompt by providing a migration name.
+* --description <description> or  - Skip the confirmation prompt by providing a migration
+  -d <description>                  description.
