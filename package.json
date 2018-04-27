@@ -1,6 +1,6 @@
 {
   "name": "nomad-cli",
-  "version": "1.1.1",
+  "version": "1.1.2",
   "description": "A database migration tool",
   "main": "index.js",
   "bin": {
@@ -13,9 +13,9 @@
   "author": "Robert Hurst <rhurst@e-xact.com>",
   "license": "MIT",
   "devDependencies": {
-    "mocha": "^2.2.5",
+    "mocha": "^5.1.1",
     "pre-commit": "^1.2.2",
-    "sinon": "^1.17.7"
+    "sinon": "^4.5.0"
   },
   "dependencies": {
     "async": "^1.4.2",
@@ -23,8 +23,8 @@
     "cardinal": "^1.0.0",
     "chalk": "^1.1.3",
     "cli-table": "^0.3.1",
-    "eslint": "^3.12.2",
-    "eslint-config-x2": "^2.0.0",
+    "eslint": "^4.6.1",
+    "eslint-config-x2": "^3.0.1",
     "glob": "^7.1.1",
     "inquirer": "^2.0.0",
     "mkdirp": "^0.5.1",
