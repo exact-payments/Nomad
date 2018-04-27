@@ -46,7 +46,7 @@ class ShowMigrations {
             const margin    = chalk.green('|->');
             lines.push(`${margin} ${pad(migration.name, unappliedWidth)} ${migration.description}`);
           }
-          if (unappliedMigrations.length < 1) {
+          if (unappliedMigrations.length === 0) {
             lines.push(`${chalk.green('|')} ${chalk.grey('none')}`);
           }
           lines.push(chalk.green('| UNAPPLIED MIGRATIONS'));
@@ -76,7 +76,7 @@ class ShowMigrations {
           const appliedWidth      = migrations.applied
             .reduce((a, m) => Math.max(a, m.name.length + 1), 0);
           lines.unshift(`${chalk.yellow('|')} ${chalk.yellow('APPLIED MIGRATIONS')}`);
-          if (appliedMigrations.length < 1) {
+          if (appliedMigrations.length === 0) {
             lines.unshift(`${chalk.yellow('|')} ${chalk.grey('none')}`);
           }
           let irreversible = false;
